@@ -1,0 +1,19 @@
+HOST BOT MAHDE - PATCH NOTES
+1. Fixed Start/Stop/Restart errors (duplicate _progress_bar crashed loading()).
+2. Fixed Live Logs (tail_log missing) and other undefined helpers.
+3. Source files no longer wiped unless restorable; key cache always kept locally.
+4. Rebranded to HOST BOT MAHDE; Simran strings removed.
+5. Admin panel: Edit Messages (welcome new/back, pending, approved, rejected, admin request) with placeholders + preview + reset.
+6. Admin panel slimmed to core features.
+7. Border theme: edit TH_TOP / TH_BOT / TH_SIDE / TH_LINE near the end of bot.py.
+ENV: set BOT_TOKEN and OWNER_ID (OWNER_ID default is now 0). Optional: SUPPORT_USERNAME.
+
+── FIX 2 (restart + multi-upload) ──
+8.  Restart: old process supervisor no longer double-restarts / marks the fresh bot "crashed".
+9.  Bot restarting ITSELF (os.execv / sys.exit / os._exit / subprocess) now works:
+    source files are no longer wiped after start (set env WIPE_BOT_SOURCE=1 to bring wipe back),
+    and a clean self-exit is auto-restarted (max_crash_restarts per hour, crash_restart_delay).
+10. Uploading 3-4 bots at once: DB writes are atomic (no more status overwrite between bots),
+    pip installs are queued (MAX_PARALLEL_INSTALLS, default 2) and skipped when nothing changed,
+    bot processes get a higher OOM score so the kernel kills a bot before the panel.
+11. On panel boot, bots marked running/crashed are started one by one in the background.
